@@ -67,12 +67,12 @@ static int cmd_x(char *args)
    int k=atoi(arg1);
    union ad addr;
    addr.addr_u=strtol(arg2,NULL,16);
-   printf("0x%d: ",addr.addr_u);
+   printf("0x%x: ",addr.addr_u);
    int i=1;
    for(;i<=k;i++){
     printf("%x\t",*(addr.addr_p));
     if(i%4==0)printf(" ");
-    if(i%16==0)printf("\n\t");
+    if(i%12==0)printf("\n\t");
    }
    printf("\n");
   return 0;
