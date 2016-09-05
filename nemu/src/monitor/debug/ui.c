@@ -9,6 +9,13 @@
 
 void cpu_exec(uint32_t);
 
+static int cmd_si(char *arg)
+{
+uint32_t n=atoi(arg);
+cpu_exec(n);
+return 0;
+}
+extern CPU_state cpu;
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
 	static char *line_read = NULL;
@@ -31,6 +38,21 @@ static int cmd_c(char *args) {
 	cpu_exec(-1);
 	return 0;
 }
+static int cmd_info(char *args){
+	if(*args=='r'){
+	  printf("EAX:  0x%x   %d\n",cpu.gpr[0]._32,cpu.gpr[0]._32);
+	  printf("ECX:  0x%x   %d\n",cpu.gpr[1]._32,cpu.gpr[1]._32);
+	  printf("EDX:  0x%x   %d\n",cpu.gpr[2]._32,cpu.gpr[2]._32);
+	  printf("EBX:  0x%x   %d\n",cpu.gpr[3]._32,cpu.gpr[3]._32);
+	  printf("ESP:  0x%x\n",cpu.gpr[4]._32);
+	  printf("EBP:  0x%x\n",cpu.gpr[5]._32);
+	  printf("ESI:  0x%x\n",cpu.gpr[6]._32);
+	  printf("EDI:  0x%x\n",cpu.gpr[7]._32);
+	  printf("EIP:  0x%x\n",cpu.eip);
+		}
+	return 0;
+}
+
 
 static int cmd_q(char *args) {
 	return -1;
@@ -46,7 +68,8 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-
+	{"si","Excute n instructions.Usage: si [n]",cmd_si},
+	{"info","print the state of the running program",cmd_info},
 	/* TODO: Add more commands */
 
 };
