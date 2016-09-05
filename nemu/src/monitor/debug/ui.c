@@ -62,9 +62,7 @@ static int cmd_info(char *args){
 static int cmd_x(char *args)
 {
    char* arg1=strtok(args," ");
-   printf("%s\n",arg1);
    char* arg2=strtok(NULL," ");
-   printf("%s\n",arg2);
    if(arg2==NULL ||arg1==NULL)printf("Wrong usage!Type help for help\n");
    int k=atoi(arg1);
    union ad addr;
@@ -72,10 +70,11 @@ static int cmd_x(char *args)
    printf("0x%d: ",addr.addr_u);
    int i=1;
    for(;i<=k;i++){
-    printf("%d\t",*(addr.addr_p));
+    printf("%x\t",*(addr.addr_p));
     if(i%4==0)printf(" ");
     if(i%16==0)printf("\n\t");
    }
+   printf("\n");
   return 0;
 }
 static int cmd_q(char *args) {
