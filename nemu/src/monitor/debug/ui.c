@@ -62,7 +62,9 @@ static int cmd_info(char *args){
 static int cmd_x(char *args)
 {
    char* arg1=strtok(args," ");
+   printf("%s\n",arg1);
    char* arg2=strtok(args," ");
+   printf("%s\n",arg2);
    if(arg2==NULL ||arg1==NULL)printf("Wrong usage!Type help for help\n");
    int k=atoi(arg1);
    union ad addr;
