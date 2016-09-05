@@ -70,8 +70,8 @@ static int cmd_x(char *args)
    printf("0x%x: ",addr.addr_u);
    int i=1;
    for(;i<=k;i++){
-    printf("%x\t",*(addr.addr_p++));
-    if(i%4==0)printf(" ");
+    printf("\t%x",*(addr.addr_p++));
+    if(i%4==0)printf("\t");
     if(i%12==0)printf("\n\t");
    }
    printf("\n");
