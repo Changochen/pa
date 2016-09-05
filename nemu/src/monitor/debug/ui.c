@@ -70,7 +70,7 @@ static int cmd_x(char *args)
    printf("0x%x:\t",addr.addr_u);
    int i=1;
    for(;i<=k;i++){
-     char c=*(addr.addr_p++);
+    unsigned char c=*(addr.addr_p++);
     printf("%02x",c);
     if(i%4==0)printf("\t");
     if(i%12==0)printf("\n\t");
