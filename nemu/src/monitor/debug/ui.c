@@ -73,7 +73,11 @@ static int cmd_x(char *args)
     unsigned char c=*(addr.addr_p++);
     printf("%02x",c);
     if(i%4==0)printf("\t");
-    if(i%16==0)printf("\n\t\t");
+    if(i%16==0){
+	printf("\n");
+        if(i==k)break;
+	printf("0x%x:\t",addr.addr_u);
+	}
    }
    printf("\n");
   return 0;
