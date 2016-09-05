@@ -7,6 +7,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+
+union ad{
+char *addr_p;
+uint32_t addr_u;
+};
 void cpu_exec(uint32_t);
 
 static int cmd_si(char *arg)
@@ -40,10 +45,10 @@ static int cmd_c(char *args) {
 }
 static int cmd_info(char *args){
 	if(*args=='r'){
-	  printf("EAX:  0x%x   %d\n",cpu.gpr[0]._32,cpu.gpr[0]._32);
-	  printf("ECX:  0x%x   %d\n",cpu.gpr[1]._32,cpu.gpr[1]._32);
-	  printf("EDX:  0x%x   %d\n",cpu.gpr[2]._32,cpu.gpr[2]._32);
-	  printf("EBX:  0x%x   %d\n",cpu.gpr[3]._32,cpu.gpr[3]._32);
+	  printf("EAX:  0x%x\t%d\n",cpu.gpr[0]._32,cpu.gpr[0]._32);
+	  printf("ECX:  0x%x\t%d\n",cpu.gpr[1]._32,cpu.gpr[1]._32);
+	  printf("EDX:  0x%x\t%d\n",cpu.gpr[2]._32,cpu.gpr[2]._32);
+	  printf("EBX:  0x%x\t%d\n",cpu.gpr[3]._32,cpu.gpr[3]._32);
 	  printf("ESP:  0x%x\n",cpu.gpr[4]._32);
 	  printf("EBP:  0x%x\n",cpu.gpr[5]._32);
 	  printf("ESI:  0x%x\n",cpu.gpr[6]._32);
@@ -54,6 +59,23 @@ static int cmd_info(char *args){
 }
 
 
+static int cmd_x(char *args)
+{
+   char* arg1=strtok(args," ");
+   char* arg2=strtok(args," ");
+   if(arg2==NULL ||arg1==NULL)printf("Wrong usage!Type help for help\n");
+   int k=atoi(arg1);
+   union ad addr;
+   addr.addr_u=strtol(arg2,NULL,16);
+   printf("0x%d: ",addr.addr_u);
+   int i=1;
+   for(;i<=k;i++){
+    printf("%d\t",*(addr.addr_p));
+    if(i%4==0)printf(" ");
+    if(i%16==0)printf("\n\t");
+   }
+  return 0;
+}
 static int cmd_q(char *args) {
 	return -1;
 }
@@ -69,7 +91,8 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{"si","Excute n instructions.Usage: si [n]",cmd_si},
-	{"info","print the state of the running program",cmd_info},
+	{"info","Print the state of the running program",cmd_info},
+	{"x","Scanf the address. Usage x [n]",cmd_x},
 	/* TODO: Add more commands */
 
 };
