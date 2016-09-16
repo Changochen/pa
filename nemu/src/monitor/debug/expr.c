@@ -193,8 +193,14 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-
+	int i=0;
+	int le=0;
+	for(;i!=nr_token;i++){
+		if(le<0)assert(0);
+		if(tokens[i].type=='(')le++;
+		else if(tokens[i].type==')')le--;
+	}
+	if(le!=0)assert(0);
 	/* TODO: Insert codes to evaluate the expression. */
-	
 	return eval();
 } 
