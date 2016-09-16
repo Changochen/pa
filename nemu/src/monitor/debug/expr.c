@@ -8,7 +8,7 @@
 
 #define MAX_TOKEN 32;
 enum {
-	NOTYPE = 256, EQ,ID,NUM,HEX,NOT,AND,OR,NEQ,LEQ,GEQ,LS,GT,MINUS,
+	NOTYPE = 256, EQ,ID,NUM,HEX,NOT,AND,OR,NEQ,LEQ,GEQ,LS,GT,MINUS,DEF
 
 };
 
@@ -20,7 +20,6 @@ static struct rule {
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
 	 */
-
 	{"<=",LEQ},
 	{"!=",NEQ},
 	{">=",GEQ},
@@ -70,7 +69,7 @@ typedef struct token {
 
 Token tokens[32];
 int nr_token;
-
+int pd=1;
 static bool make_token(char *e) {
 	int position = 0;
 	int i;
@@ -94,15 +93,45 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
+					case OR:
+						tokens[nr_token].precedent=pd;
+						tokens[nr_token].type=rules[i].token_type;
+						nr_token++;
+						break;
+					case AND:
+						tokens[nr_token].precedent=++pd;
+						tokens[nr_token].type=rules[i].token_type;
+						nr_token++;
+						break;
+					case EQ:
+					case NEQ:
+						tokens[nr_token].precedent=++pd;
+						tokens[nr_token].type=rules[i].token_type;
+						nr_token++;
+						break;
+					case GEQ:
+					case LEQ:
+					case LS:
+					case GT:
+						tokens[nr_token].precedent=++pd;
+						tokens[nr_token].type=rules[i].token_type;
+						nr_token++;
+						break;
 				 	case '+':
 					case '-':
-						tokens[nr_token].precedent=1;
+						tokens[nr_token].precedent=++pd;
 						tokens[nr_token].type=rules[i].token_type;
 						nr_token++;
 						break;
 					case '*':
 					case '/':
-						tokens[nr_token].precedent=2;
+						tokens[nr_token].precedent=++pd;
+						tokens[nr_token].type=rules[i].token_type;
+						nr_token++;
+						break;
+					case DEF:
+					case NOT:
+						tokens[nr_token].precedent=++pd;
 						tokens[nr_token].type=rules[i].token_type;
 						nr_token++;
 						break;
@@ -208,8 +237,13 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 	int i=0;
+	for(i=0;i!=nr_token;i++){
+		int type=tokens[i].type;
+		if(type=='*'&&(i==0||tokens[i-1].type!=NUM))tokens[i].type=DEF;
+		else if(type=='-'&&(i==0||tokens[i-1].type!=NUM))tokens[i].type=MINUS;
+	}
 	int le=0;
-	for(;i!=nr_token;i++){
+	for(i=0;i!=nr_token;i++){
 		if(le<0)assert(0);
 		if(tokens[i].type=='(')le++;
 		else if(tokens[i].type==')')le--;
