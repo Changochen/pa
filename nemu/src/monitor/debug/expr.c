@@ -8,7 +8,7 @@
 
 #define MAX_TOKEN 32;
 enum {
-	NOTYPE = 256, EQ,ID,NUM,HEX,NOT,AND,OR,NEQ,LEQ,GEQ,LS,GT,MINUS,DEF
+	NOTYPE = 256, EQ,ID,NUM,HEX,NOT,AND,OR,NEQ,LEQ,GEQ,LS,GT,MINUS,DEF,EAX=400,EBX,ECX,EDX,ESP,EBP,EDI,ESI,EIP
 
 };
 
@@ -20,6 +20,7 @@ static struct rule {
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
 	 */
+	{"\\$eax",EAX},
 	{"<=",LEQ},
 	{"!=",NEQ},
 	{">=",GEQ},
