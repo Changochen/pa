@@ -69,11 +69,12 @@ static int cmd_x(char *args)
 	addr=strtol(arg2,NULL,16);
 	int i=0;
 	for(i=0;i!=k;i++){
-		if(i%4==0)printf("0x%x: ",addr);
-		printf("%x ",hwaddr_read(addr,4));
+		if(i%4==0)printf("0x%08x: ",addr);
+		printf("%08x ",hwaddr_read(addr,4));
 		if((i+1)%4==0)printf("\n");
 		addr+=4;
 	}
+	printf("\n");
 	return 0;
 }
 static int cmd_q(char *args) {
