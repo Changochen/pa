@@ -58,7 +58,14 @@ static int cmd_info(char *args){
 	return 0;
 }
 
-
+static int cmd_p(char *args)
+{
+	bool f;
+	unsigned int res=expr(args,&f);
+	if(f==false)assert(0);
+	else printf("%d\n",res);
+	return 0;
+}
 static int cmd_x(char *args)
 {
 	char* arg1=strtok(args," ");
@@ -94,6 +101,7 @@ static struct {
 	{"si","Excute n instructions.Usage: si [n]",cmd_si},
 	{"info","Print the state of the running program",cmd_info},
 	{"x","Scanf the address. Usage x [n]",cmd_x},
+	{"p","Evaluate expression and print the value.Usage p expr",cmd_p},	
 	/* TODO: Add more commands */
 
 };
