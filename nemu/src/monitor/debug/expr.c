@@ -163,6 +163,11 @@ int eval(){
 	while(stackopr_t>0){
 		stackeval[stackeval_t++]=stackopr[--stackopr_t];
 	}
+	for(i=0;i!=stackeval_t;i++)
+	{
+		printf("%c",tokens[stackeval[i]].type==NUM?'N':tokens[stackeval[i]].type);
+	}
+	printf("\n");
 	int result[32];
 	int resindex=0;
 	for(i=0;i!=stackeval_t;i++)
