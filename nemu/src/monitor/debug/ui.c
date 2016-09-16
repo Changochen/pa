@@ -67,8 +67,12 @@ static int cmd_x(char *args)
    int k=atoi(arg1);
    unsigned int addr;
    addr=strtol(arg2,NULL,16);
-   hwaddr_read(addr,k);
-  return 0;
+   int i=0;
+   for( i=0;i!=k;i++){
+   hwaddr_read(addr,4);
+   addr+=4;
+	}
+   return 0;
 }
 static int cmd_q(char *args) {
 	return -1;
