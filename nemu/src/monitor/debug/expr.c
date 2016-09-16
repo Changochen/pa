@@ -6,8 +6,9 @@
 #include <sys/types.h>
 #include <regex.h>
 
+#define MAX_TOKEN 32;
 enum {
-	NOTYPE = 256, EQ,ID,NUM,HEX
+	NOTYPE = 256, EQ,ID,NUM,HEX,
 
 };
 
@@ -22,6 +23,8 @@ static struct rule {
 
 	{" +",	NOTYPE},				// spaces
 	{"[0-9]+",NUM},					//NUM
+	{"\\(",'('},
+	{"\\)",')'},
 	{"0x[A-Fa-f0-9]+",HEX},				//Hex
 	{"\\/",'/'},					//divide
 	{"\\*",'*'},					//multiply
@@ -53,6 +56,7 @@ void init_regex() {
 
 typedef struct token {
 	int type;
+	int precedent;
 	char str[32];
 } Token;
 
@@ -84,18 +88,36 @@ static bool make_token(char *e) {
 				switch(rules[i].token_type) {
 				 	case '+':
 					case '-':
-					case '*':
-					case '/':
+						tokens[nr_token].precedent=1;
 						tokens[nr_token].type=rules[i].token_type;
 						nr_token++;
+						break;
+					case '*':
+					case '/':
+						tokens[nr_token].precedent=2;
+						tokens[nr_token].type=rules[i].token_type;
+						nr_token++;
+						break;
+					case '(':
+					case ')':
+						tokens[nr_token].type=rules[i].token_type;
+						nr_token++;	
 						break;
 					case NOTYPE:
 						break;
 					case NUM:
-					case HEX:
-						strncpy(tokens[nr_token].str,e+position-substr_len,substr_len>32?32:substr_len);
-						tokens[nr_token].type=rules[i].token_type;
+						strncpy(tokens[nr_token].str,e+position-substr_len,substr_len>31?31:substr_len); 
+						tokens[nr_token].str[31]='\0'; 
+						tokens[nr_token].type=rules[i].token_type; nr_token++;
 						break;				
+					case HEX:
+						strncpy(tokens[nr_token].str,e+position-substr_len,substr_len>31?31:substr_len); 
+						tokens[nr_token].str[31]='\0'; 
+						int temp;
+						sscanf(tokens[nr_token].str,"0x%x",&temp);
+						snprintf(tokens[nr_token].str,32,"%d",temp);	
+						tokens[nr_token].type=NUM; nr_token++;
+						break;	
 					default: panic("please implement me");
 				}
 
@@ -112,14 +134,67 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+int stackeval[32],stackopr[32];
+int stackeval_t=0,stackopr_t=0;
+
+int eval(){
+	stackeval_t=stackopr_t=0;
+	int i=0;
+	for(i=0;i!=nr_token;i++){
+		if(tokens[i].type==NUM){
+			stackeval[stackeval_t++]=i;
+		}else if(tokens[i].type=='('){
+			stackopr[stackopr_t++]=i;
+		}else if(tokens[i].type==')'){
+			while(tokens[stackopr[--stackopr_t]].type!='('){
+				stackeval[stackeval_t++]=stackopr[stackopr_t];
+			}
+		}else if(stackopr_t==0)stackopr[stackopr_t++]=i;
+	        else if(tokens[i].precedent>=tokens[stackopr[stackopr_t-1]].precedent)stackopr[stackopr_t++]=i;
+		else {
+				while(stackopr_t>0&&tokens[stackopr[--stackopr_t]].precedent>=tokens[i].precedent)
+					stackeval[stackeval_t++]=stackopr[stackopr_t];
+				stackopr_t++;
+				stackopr[stackopr_t++]=i;
+		}
+	}
+	while(stackopr_t>0){
+		stackeval[stackeval_t++]=stackopr[--stackopr_t];
+	}
+	int result[32];
+	int resindex=0;
+	for(i=0;i!=stackeval_t;i++)
+	{
+		if(tokens[stackeval[i]].type==NUM)result[resindex++]=stackeval[i];
+		else{
+			if(resindex<2)assert(0);
+			else{
+				int a=result[--resindex];
+				int b=result[resindex-1];
+				switch(tokens[stackeval[i]].type){
+					case '+':a+=b;break;
+					case '-':a-=b;break;
+					case '*':a*=b;break;
+					case '/':
+						if(b==0)assert(0);
+						a/=b;
+						break;
+					default:break;
+				}
+				result[resindex-1]=a;
+			}
+		}
+	}	
+	return result[0];
+}
 uint32_t expr(char *e, bool *success) {
-	if(!make_token(e)) {
+	nr_token=0;
+	 if(!make_token(e)) {
 		*success = false;
 		return 0;
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
-	return 0;
-}
-
+	
+	return eval();
+} 
