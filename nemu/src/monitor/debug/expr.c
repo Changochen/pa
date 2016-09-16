@@ -146,9 +146,12 @@ int eval(){
 		}else if(tokens[i].type=='('){
 			stackopr[stackopr_t++]=i;
 		}else if(tokens[i].type==')'){
-			while(tokens[stackopr[--stackopr_t]].type!='('){
+			stackopr_t--;
+			while(tokens[stackopr[stackopr_t]].type!='('){
 				stackeval[stackeval_t++]=stackopr[stackopr_t];
+				stackopr_t--;
 			}
+			stackopr_t++;
 		}else{
 		if(stackopr_t==0)stackopr[stackopr_t++]=i;
 	        else if(tokens[i].precedent>tokens[stackopr[stackopr_t-1]].precedent)stackopr[stackopr_t++]=i;
