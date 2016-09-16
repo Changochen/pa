@@ -232,6 +232,14 @@ int eval(){
 				int a=result[resindex-2];
 				int b=result[resindex-1];
 				switch(tokens[stackeval[i]].type){
+					case GEQ:a=(a>=b);break;
+					case LEQ:a=(a<=b);break;
+					case LS: a=(a<b);break;
+					case GT: a=(a>b);break;
+					case EQ: a=(a==b);break;
+					case NEQ:a=(a!=b);break;
+					case AND:a=(a&&b);break;
+					case OR: a=(a||b);break;
 					case '+':a+=b;break;
 					case '-':a-=b;break;
 					case '*':a*=b;break;
