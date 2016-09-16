@@ -154,11 +154,13 @@ int eval(){
 			stackopr_t++;
 		}else{
 		if(stackopr_t==0)stackopr[stackopr_t++]=i;
-	        else if(tokens[i].precedent>tokens[stackopr[stackopr_t-1]].precedent)stackopr[stackopr_t++]=i;
+	        else if(tokens[i].precedent>=tokens[stackopr[stackopr_t-1]].precedent)stackopr[stackopr_t++]=i;
 		else {
-				while(stackopr_t>0&&tokens[stackopr[--stackopr_t]].precedent>=tokens[i].precedent)
-					stackeval[stackeval_t++]=stackopr[stackopr_t];
-				stackopr_t++;
+				while(stackopr_t>0&&tokens[stackopr[stackopr_t-1]].precedent>tokens[i].precedent)
+					{
+						stackopr_t--;
+						stackeval[stackeval_t++]=stackopr[stackopr_t];
+					}
 				stackopr[stackopr_t++]=i;
 		}
 		}
