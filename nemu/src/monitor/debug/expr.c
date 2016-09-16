@@ -172,6 +172,7 @@ int eval(){
 		printf("%c",tokens[stackeval[i]].type==NUM?'N':tokens[stackeval[i]].type);
 	}
 	printf("\n");
+	printf("%d\n",stackeval_t);
 	int result[32];
 	int resindex=0;
 	for(i=0;i!=stackeval_t;i++)
