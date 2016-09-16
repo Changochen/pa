@@ -178,6 +178,7 @@ int eval(){
 			else{
 				int a=atoi(tokens[result[resindex-1]].str);
 				int b=atoi(tokens[result[resindex-2]].str);
+				printf("%d %d\n",a,b);
 				switch(tokens[stackeval[i]].type){
 					case '+':a+=b;break;
 					case '-':a-=b;break;
