@@ -195,8 +195,7 @@ int eval(){
 	return result[0];
 }
 uint32_t expr(char *e, bool *success) {
-	nr_token=0;
-	 if(!make_token(e)) {
+	if(!make_token(e)) {
 		*success = false;
 		return 0;
 	}

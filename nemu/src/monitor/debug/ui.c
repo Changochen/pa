@@ -60,7 +60,7 @@ static int cmd_info(char *args){
 
 static int cmd_p(char *args)
 {
-	bool f;
+	bool f=true;
 	unsigned int res=expr(args,&f);
 	if(f==false)assert(0);
 	else printf("%d\n",res);
