@@ -30,10 +30,10 @@ static struct rule {
 	{"&&",AND},					//and
 	{"\\|\\|",OR},					//or				
 	{" +",	NOTYPE},				// spaces
+	{"0x[A-Fa-f0-9]+",HEX},				//Hex
 	{"[0-9]+",NUM},					//NUM
 	{"\\(",'('},
 	{"\\)",')'},
-	{"0x[A-Fa-f0-9]+",HEX},				//Hex
 	{"\\/",'/'},					//divide
 	{"\\*",'*'},					//multiply
 	{"\\+", '+'},					// plus
