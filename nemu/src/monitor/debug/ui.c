@@ -65,21 +65,9 @@ static int cmd_x(char *args)
    char* arg2=strtok(NULL," ");
    if(arg2==NULL ||arg1==NULL)printf("Wrong usage!Type help for help\n");
    int k=atoi(arg1);
-   union ad addr;
-   addr.addr_u=strtol(arg2,NULL,16);
-   printf("0x%x:\t",addr.addr_u);
-   int i=1;
-   for(;i<=k;i++){
-    unsigned char c=*(addr.addr_p++);
-    printf("%02x",c);
-    if(i%4==0)printf("\t");
-    if(i%16==0){
-	printf("\n");
-        if(i==k)break;
-	printf("0x%x:\t",addr.addr_u);
-	}
-   }
-   printf("\n");
+   unsigned int addr;
+   addr=strtol(arg2,NULL,16);
+   hwaddr_read(addr,k);
   return 0;
 }
 static int cmd_q(char *args) {
