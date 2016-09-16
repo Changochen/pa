@@ -210,8 +210,25 @@ int eval(){
 	{
 		if(tokens[stackeval[i]].type==NUM)result[resindex++]=atoi(tokens[stackeval[i]].str);
 		else{
-			if(resindex<2)assert(0);
+			int t=tokens[stackeval[i]].type;
+			if(t==DEF||t==NOT||t==MINUS){
+				if(resindex<1)assert(0);
+				int a=result[resindex-1];
+				switch(t){
+					case DEF:
+						a=hwaddr_read(a,4);
+						break;
+					case MINUS:
+						a=-a;
+						break;
+					case NOT:
+						a=!a;
+						break;			
+				}
+				result[resindex-1]=a;
+			}
 			else{
+			        if(resindex<2)assert(0);
 				int a=result[resindex-2];
 				int b=result[resindex-1];
 				switch(tokens[stackeval[i]].type){
