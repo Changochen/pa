@@ -177,12 +177,12 @@ int eval(){
 	int resindex=0;
 	for(i=0;i!=stackeval_t;i++)
 	{
-		if(tokens[stackeval[i]].type==NUM)result[resindex++]=stackeval[i];
+		if(tokens[stackeval[i]].type==NUM)result[resindex++]=atoi(tokens[stackeval[i]].str);
 		else{
 			if(resindex<2)assert(0);
 			else{
-				int b=atoi(tokens[result[resindex-1]].str);
-				int a=atoi(tokens[result[resindex-2]].str);
+				int a=result[resindex-2];
+				int b=result[resindex-1];
 				printf("%d %d\n",a,b);
 				switch(tokens[stackeval[i]].type){
 					case '+':a+=b;break;
