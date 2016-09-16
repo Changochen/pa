@@ -6,9 +6,9 @@
 #include <sys/types.h>
 #include <regex.h>
 
-#define MAX_TOKEN 32;
+extern CPU_state cpu;
 enum {
-	NOTYPE = 256, EQ,ID,NUM,HEX,NOT,AND,OR,NEQ,LEQ,GEQ,LS,GT,MINUS,DEF,EAX=400,EBX,ECX,EDX,ESP,EBP,EDI,ESI,EIP
+	NOTYPE = 256, EQ,ID,NUM,HEX,NOT,AND,OR,NEQ,LEQ,GEQ,LS,GT,MINUS,DEF,EAX=400,ECX,EDX,EBX,ESP,EBP,ESI,EDI,EIP
 
 };
 
@@ -21,6 +21,14 @@ static struct rule {
 	 * Pay attention to the precedence level of different rules.
 	 */
 	{"\\$eax",EAX},
+	{"\\$ecx",ECX},
+	{"\\$edx",EDX},
+	{"\\$ebx",EBX},
+	{"\\$esp",ESP},
+	{"\\$ebp",EBP},
+	{"\\$esi",ESI},
+	{"\\$edi",EDI},
+	{"\\$eip",EIP},
 	{"<=",LEQ},
 	{"!=",NEQ},
 	{">=",GEQ},
@@ -92,8 +100,22 @@ static bool make_token(char *e) {
 				 * to record the token in the array `tokens'. For certain types
 				 * of tokens, some extra actions should be performed.
 				 */
-
+				int index;
 				switch(rules[i].token_type) {
+					case EAX:
+					case ECX:
+					case EDX:
+					case EBX:
+					case ESP:
+					case EBP:
+					case ESI:
+					case EDI:
+						index=rules[i].token_type%400;
+						unsigned int* p=(unsigned int*)&cpu;
+						snprintf(tokens[nr_token].str,32,"%d",*(p+index));
+						tokens[nr_token].type=NUM;
+						nr_token++;
+						break;	
 					case OR:
 						tokens[nr_token].precedent=pd;
 						tokens[nr_token].type=rules[i].token_type;
