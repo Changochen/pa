@@ -1,5 +1,5 @@
 #include "nemu.h"
-
+#include<stdlib.h>
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
@@ -176,8 +176,8 @@ int eval(){
 		else{
 			if(resindex<2)assert(0);
 			else{
-				int a=result[--resindex];
-				int b=result[resindex-1];
+				int a=atoi(tokens[result[--resindex]].str);
+				int b=atoi(tokens[result[resindex-1]].str);
 				switch(tokens[stackeval[i]].type){
 					case '+':a+=b;break;
 					case '-':a-=b;break;
