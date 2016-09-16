@@ -176,8 +176,8 @@ int eval(){
 		else{
 			if(resindex<2)assert(0);
 			else{
-				int a=atoi(tokens[result[--resindex]].str);
-				int b=atoi(tokens[result[resindex-1]].str);
+				int a=atoi(tokens[result[resindex-1]].str);
+				int b=atoi(tokens[result[resindex-2]].str);
 				switch(tokens[stackeval[i]].type){
 					case '+':a+=b;break;
 					case '-':a-=b;break;
@@ -188,7 +188,8 @@ int eval(){
 						break;
 					default:break;
 				}
-				result[resindex-1]=a;
+				result[resindex-2]=a;
+				resindex--;
 			}
 		}
 	}	
