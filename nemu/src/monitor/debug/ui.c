@@ -9,16 +9,16 @@
 
 
 union ad{
-char *addr_p;
-uint32_t addr_u;
+	char *addr_p;
+	uint32_t addr_u;
 };
 void cpu_exec(uint32_t);
 
 static int cmd_si(char *arg)
 {
-uint32_t n=atoi(arg);
-cpu_exec(n);
-return 0;
+	uint32_t n=atoi(arg);
+	cpu_exec(n);
+	return 0;
 }
 extern CPU_state cpu;
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -45,34 +45,36 @@ static int cmd_c(char *args) {
 }
 static int cmd_info(char *args){
 	if(*args=='r'){
-	  printf("EAX:  0x%x\t%d\n",cpu.gpr[0]._32,cpu.gpr[0]._32);
-	  printf("ECX:  0x%x\t%d\n",cpu.gpr[1]._32,cpu.gpr[1]._32);
-	  printf("EDX:  0x%x\t%d\n",cpu.gpr[2]._32,cpu.gpr[2]._32);
-	  printf("EBX:  0x%x\t%d\n",cpu.gpr[3]._32,cpu.gpr[3]._32);
-	  printf("ESP:  0x%x\n",cpu.gpr[4]._32);
-	  printf("EBP:  0x%x\n",cpu.gpr[5]._32);
-	  printf("ESI:  0x%x\n",cpu.gpr[6]._32);
-	  printf("EDI:  0x%x\n",cpu.gpr[7]._32);
-	  printf("EIP:  0x%x\n",cpu.eip);
-		}
+		printf("EAX:  0x%x\t%d\n",cpu.gpr[0]._32,cpu.gpr[0]._32);
+		printf("ECX:  0x%x\t%d\n",cpu.gpr[1]._32,cpu.gpr[1]._32);
+		printf("EDX:  0x%x\t%d\n",cpu.gpr[2]._32,cpu.gpr[2]._32);
+		printf("EBX:  0x%x\t%d\n",cpu.gpr[3]._32,cpu.gpr[3]._32);
+		printf("ESP:  0x%x\n",cpu.gpr[4]._32);
+		printf("EBP:  0x%x\n",cpu.gpr[5]._32);
+		printf("ESI:  0x%x\n",cpu.gpr[6]._32);
+		printf("EDI:  0x%x\n",cpu.gpr[7]._32);
+		printf("EIP:  0x%x\n",cpu.eip);
+	}
 	return 0;
 }
 
 
 static int cmd_x(char *args)
 {
-   char* arg1=strtok(args," ");
-   char* arg2=strtok(NULL," ");
-   if(arg2==NULL ||arg1==NULL)printf("Wrong usage!Type help for help\n");
-   int k=atoi(arg1);
-   unsigned int addr;
-   addr=strtol(arg2,NULL,16);
-   int i=0;
-   for( i=0;i!=k;i++){
-   hwaddr_read(addr,4);
-   addr+=4;
+	char* arg1=strtok(args," ");
+	char* arg2=strtok(NULL," ");
+	if(arg2==NULL ||arg1==NULL)printf("Wrong usage!Type help for help\n");
+	int k=atoi(arg1);
+	unsigned int addr;
+	addr=strtol(arg2,NULL,16);
+	int i=0;
+	for(i=0;i!=k;i++){
+		if(i%4==0)printf("0x%x: ",addr);
+		printf("%x ",hwaddr_read(addr,4));
+		if((i+1)%4==0)printf("\n");
+		addr+=4;
 	}
-   return 0;
+	return 0;
 }
 static int cmd_q(char *args) {
 	return -1;
