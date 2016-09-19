@@ -13,7 +13,10 @@ union ad{
 	uint32_t addr_u;
 };
 void cpu_exec(uint32_t);
-
+static int cmd_d(char *arg)
+{
+	return 0;
+}
 static int cmd_si(char *arg)
 {
 		
@@ -75,7 +78,6 @@ static int cmd_p(char *args)
 	else printf("%d\n",res);
 	return 0;
 }
-
 static int cmd_w(char *args)
 {
 	bool f=true;
@@ -93,6 +95,13 @@ static int cmd_w(char *args)
 	return 0;
 }
 	
+static int cmd_br(char *args){
+	char p[1024];
+	strncpy(p,"$eip==",1024);
+	strncpy(p+6,args,1000);
+	cmd_w(p);
+	return 0;
+}
 static int cmd_x(char *args)
 {
 	char* arg1=strtok(args," ");
@@ -130,6 +139,8 @@ static struct {
 	{"x","Scanf the address. Usage x [n]",cmd_x},
 	{"p","Evaluate expression and print the value.Usage p expr",cmd_p},	
 	{"w","Set watchpoint at expr.Usage p expr",cmd_w},
+	{"br","Breakpoint set at address N.Usage br N",cmd_br},
+	{"d","Delete breakpoint.Usage d N.",cmd_d},
 	/* TODO: Add more commands */
 
 };
