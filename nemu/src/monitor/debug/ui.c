@@ -17,6 +17,7 @@ void cpu_exec(uint32_t);
 static int cmd_si(char *arg)
 {
 	uint32_t n=atoi(arg);
+	if(arg==NULL)n=1;
 	cpu_exec(n);
 	return 0;
 }
