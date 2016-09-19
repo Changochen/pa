@@ -7,6 +7,7 @@
 #include <readline/history.h>
 extern WP* gethead();
 extern WP* new_wp();
+extern void free_wp();
 union ad{
 	char *addr_p;
 	uint32_t addr_u;
@@ -14,6 +15,17 @@ union ad{
 void cpu_exec(uint32_t);
 static int cmd_d(char *arg)
 {
+	int id=atoi(arg);
+	WP *head=gethead();
+	while(head!=NULL&&id!=head->NO){
+		head=head->next;
+	}
+	if(head==NULL){
+		printf("No such watch point,are you moring tea?\n");
+	}else{
+		printf("Watch point %d deleted.\n",head->NO);
+		free_wp(head);
+	}	
 	return 0;
 }
 static int cmd_si(char *arg)
