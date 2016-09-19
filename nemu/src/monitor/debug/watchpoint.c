@@ -6,6 +6,9 @@
 static WP wp_pool[NR_WP];
 static WP *head, *free_;
 
+WP* gethead(){
+	return head;
+}
 void init_wp_pool() {
 	int i;
 	for(i = 0; i < NR_WP; i ++) {

@@ -7,7 +7,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-
+extern WP* new_wp();
 union ad{
 	char *addr_p;
 	uint32_t addr_u;
@@ -66,6 +66,19 @@ static int cmd_p(char *args)
 	else printf("%d\n",res);
 	return 0;
 }
+
+static int cmd_w(char *args)
+{
+	bool f=true;
+	unsigned int temp=expr(args,&f);
+	if(f==false)assert(0);
+	WP *new_p=new_wp();
+	strncpy(new_p->expr,args,1024);
+	new_p->old_value=temp;
+	printf("Watchpoint %d set at %s\n",new_p->NO,args);
+	return 0;
+}
+	
 static int cmd_x(char *args)
 {
 	char* arg1=strtok(args," ");
@@ -102,6 +115,7 @@ static struct {
 	{"info","Print the state of the running program",cmd_info},
 	{"x","Scanf the address. Usage x [n]",cmd_x},
 	{"p","Evaluate expression and print the value.Usage p expr",cmd_p},	
+	{"w","Set watchpoint at expr.Usage p expr",cmd_w},
 	/* TODO: Add more commands */
 
 };
