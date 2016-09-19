@@ -85,6 +85,7 @@ void cpu_exec(volatile uint32_t n) {
 					printf("Watch point %d,expr:%s\nold value:%d\tnew value:%d\n",temp->NO,temp->expr,temp->old_value,new_value);	
 					temp->old_value=new_value;
 					}
+					else printf("Breakpoint met\n");
 					nemu_state=STOP;
 				}
 				temp=temp->next;
