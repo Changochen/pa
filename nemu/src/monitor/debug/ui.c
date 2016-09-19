@@ -16,8 +16,10 @@ void cpu_exec(uint32_t);
 
 static int cmd_si(char *arg)
 {
-	uint32_t n=atoi(arg);
-	printf("%d\n",n);
+		
+	uint32_t n;
+	if(arg!=NULL)n=atoi(arg);
+	else n=1;
 	cpu_exec(n);
 	return 0;
 }
