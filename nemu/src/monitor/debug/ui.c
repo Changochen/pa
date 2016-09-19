@@ -88,7 +88,7 @@ static int cmd_w(char *args)
 	strncpy(new_p->expr,args,1024);
 	new_p->old_value=temp;
 	if(new_p->bp==false)printf("Watchpoint %d set at %s\n",new_p->NO,args);
-	else printf("Breakpoint set at %ld\n",strtol(args+6,NULL,16));
+	else printf("Breakpoint set at 0x%x\n",(unsigned)strtol(args+6,NULL,16));
 	return 0;
 }
 	
