@@ -2,7 +2,6 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
-
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -89,7 +88,7 @@ static int cmd_w(char *args)
 	strncpy(new_p->expr,args,1024);
 	new_p->old_value=temp;
 	if(new_p->bp==false)printf("Watchpoint %d set at %s\n",new_p->NO,args);
-	else printf("Breakpoint set at %d\n",atoi(args+6));
+	else printf("Breakpoint set at %ld\n",strtol(args+6,NULL,16));
 	return 0;
 }
 	
