@@ -62,7 +62,7 @@ static int cmd_info(char *args){
 	}else if(*args=='w'){
 		WP* head=gethead();
 		while(head!=NULL){
-			printf("Watchpoint %d:%s\n",head->NO,head->expr);
+			if(head->bp==false)printf("Watchpoint %d:%s\n",head->NO,head->expr);
 			head=head->next;
 		}
 	}
@@ -96,7 +96,6 @@ static int cmd_br(char *args){
 	char p[1024];
 	strncpy(p,"$eip==",1024);
 	strncpy(p+6,args,1000);
-	printf("%s\n",p);
 	cmd_w(p);
 	return 0;
 }
