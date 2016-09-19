@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
+extern WP* gethead();
 extern WP* new_wp();
 union ad{
 	char *addr_p;
@@ -76,6 +76,11 @@ static int cmd_w(char *args)
 	strncpy(new_p->expr,args,1024);
 	new_p->old_value=temp;
 	printf("Watchpoint %d set at %s\n",new_p->NO,args);
+	WP* h=gethead();
+	while(h!=NULL){
+		printf("%s\n",h->expr);
+		h=h->next;
+	}
 	return 0;
 }
 	
