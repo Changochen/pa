@@ -81,9 +81,11 @@ void cpu_exec(volatile uint32_t n) {
 				bool f=true;
 				unsigned new_value=expr(temp->expr,&f);
 				if(temp->old_value!=new_value){
+					if(temp->bp==false){
 					printf("Watch point %d,expr:%s\nold value:%d\tnew value:%d\n",temp->NO,temp->expr,temp->old_value,new_value);	
-				temp->old_value=new_value;
-				nemu_state=STOP;
+					temp->old_value=new_value;
+					}
+					nemu_state=STOP;
 				}
 				temp=temp->next;
 			}
