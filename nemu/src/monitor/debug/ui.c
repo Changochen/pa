@@ -84,14 +84,12 @@ static int cmd_w(char *args)
 	unsigned int temp=expr(args,&f);
 	if(f==false)assert(0);
 	WP *new_p=new_wp();
+	if(strncmp(args,"$eip==",6)==0)new_p->bp=true;
+	else new_p->bp=false;
 	strncpy(new_p->expr,args,1024);
 	new_p->old_value=temp;
-	printf("Watchpoint %d set at %s\n",new_p->NO,args);
-	WP* h=gethead();
-	while(h!=NULL){
-		printf("%s\n",h->expr);
-		h=h->next;
-	}
+	if(new_p->bp==false)printf("Watchpoint %d set at %s\n",new_p->NO,args);
+	else printf("Breakpoint set at %d\n",atoi(args+6));
 	return 0;
 }
 	
