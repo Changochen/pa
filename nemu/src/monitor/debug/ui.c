@@ -57,6 +57,12 @@ static int cmd_info(char *args){
 		printf("ESI:  0x%x\n",cpu.gpr[6]._32);
 		printf("EDI:  0x%x\n",cpu.gpr[7]._32);
 		printf("EIP:  0x%x\n",cpu.eip);
+	}else if(*args=='w'){
+		WP* head=gethead();
+		while(head!=NULL){
+			printf("Watchpoint %d:%s\n",head->NO,head->expr);
+			head=head->next;
+		}
 	}
 	return 0;
 }
