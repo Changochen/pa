@@ -110,6 +110,7 @@ static bool make_token(char *e) {
 					case EBP:
 					case ESI:
 					case EDI:
+					case EIP:
 						index=rules[i].token_type%400;
 						unsigned int* p=(unsigned int*)&cpu;
 						snprintf(tokens[nr_token].str,32,"%d",*(p+index));
