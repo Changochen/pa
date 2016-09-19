@@ -97,7 +97,7 @@ static int cmd_br(char *args){
 	char p[1024];
 	strncpy(p,"$eip==",1024);
 	strncpy(p+6,args,1000);
-	printf("%s\n",args);
+	printf("%s\n",p);
 	cmd_w(p);
 	return 0;
 }
